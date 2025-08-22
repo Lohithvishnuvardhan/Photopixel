@@ -39,6 +39,7 @@ import AdminRevenue from './pages/admin/AdminRevenue';
 import { SearchProvider } from './context/SearchContext';
 import { CartProvider } from './context/Cartcontext';
 import { LanguageProvider } from './context/LanguageContext';
+import { AdminProtectedRoute } from './components/AdminProtectedRoute';
 
 function ErrorFallback({ error }: { error: Error }) {
   return (
@@ -79,14 +80,46 @@ function App() {
                   <Route path="/reset-password" element={<ResetPassword />} />
                   
                   {/* Admin routes */}
-                  <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="products/add" element={<AddProduct />} />
-                    <Route path="products/edit/:id" element={<AddProduct />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="users" element={<AdminUsers />} />
-                    <Route path="revenue" element={<AdminRevenue />} />
+                  <Route path="/admin" element={
+                    <AdminProtectedRoute>
+                      <AdminLayout />
+                    </AdminProtectedRoute>
+                  }>
+                    <Route index element={
+                      <AdminProtectedRoute>
+                        <AdminDashboard />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="products" element={
+                      <AdminProtectedRoute>
+                        <AdminProducts />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="products/add" element={
+                      <AdminProtectedRoute>
+                        <AddProduct />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="products/edit/:id" element={
+                      <AdminProtectedRoute>
+                        <AddProduct />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="orders" element={
+                      <AdminProtectedRoute>
+                        <AdminOrders />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="users" element={
+                      <AdminProtectedRoute>
+                        <AdminUsers />
+                      </AdminProtectedRoute>
+                    } />
+                    <Route path="revenue" element={
+                      <AdminProtectedRoute>
+                        <AdminRevenue />
+                      </AdminProtectedRoute>
+                    } />
                   </Route>
                   
                   {/* Main app routes */}

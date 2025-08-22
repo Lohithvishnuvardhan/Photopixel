@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -14,14 +15,45 @@ import {
   Bell
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { dbHelpers } from '../utils/supabase';
 import toast from 'react-hot-toast';
 
 const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut } = useAuth();
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Check admin access on component mount
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const profile = await dbHelpers.getProfile(user.id);
+        if (profile?.role !== 'admin') {
+          toast.error('Access denied. Admin privileges required.');
+          navigate('/');
+          return;
+        }
+        setIsAdmin(true);
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        toast.error('Error verifying admin access');
+        navigate('/');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAdminAccess();
+  }, [user, navigate]);
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Products', href: '/admin/products', icon: Package },
@@ -47,6 +79,19 @@ const AdminLayout = () => {
     return location.pathname.startsWith(href);
   };
 
+  // Show loading spinner while checking admin access
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Don't render admin layout if user is not admin
+  if (!isAdmin) {
+    return null;
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar backdrop */}

@@ -5,11 +5,14 @@ import { useCartStore } from '../store/cart';
 import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { dbHelpers } from '../utils/supabase';
 import toast from 'react-hot-toast';
 
 const Layout = () => {
   const { t } = useLanguage();
   const { user, signOut } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [, setShowResults] = useState(false);
   const [, setSearchResults] = useState<any[]>([]);
@@ -23,9 +26,30 @@ const Layout = () => {
   const navTimeoutRef = useRef<NodeJS.Timeout>();
   const visibilityTimeoutRef = useRef<NodeJS.Timeout>();
   
+  // Check if user is admin
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (user) {
+        try {
+          const profile = await dbHelpers.getProfile(user.id);
+          setIsAdmin(profile?.role === 'admin');
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+      setCheckingAdmin(false);
+    };
+
+    checkAdminStatus();
+  }, [user]);
+
   const handleSignOut = async () => {
     try {
       await signOut();
+      setIsAdmin(false);
       navigate('/');
     } catch (error) {
       toast.error('Error signing out');
@@ -171,13 +195,15 @@ const Layout = () => {
                         <ShoppingCart className="h-4 w-4 inline mr-2" />
                         Orders
                       </Link>
-                      <Link
-                        to="/admin"
-                        className="block px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors"
-                      >
-                        <Settings className="h-4 w-4 inline mr-2" />
-                        Admin Panel
-                      </Link>
+                      {!checkingAdmin && isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="block px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors"
+                        >
+                          <Settings className="h-4 w-4 inline mr-2" />
+                          Admin Panel
+                        </Link>
+                      )}
                       <button
                         onClick={handleSignOut}
                         className="w-full text-left px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors last:rounded-b-lg"

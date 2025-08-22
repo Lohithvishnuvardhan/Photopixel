@@ -37,21 +37,21 @@ export default function Login() {
       }
 
       if (data.user) {
-  // fetch profile role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", data.user.id)
-    .single();
+        // Fetch profile role
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .single();
 
-  toast.success("Login successful!");
+        toast.success("Login successful!");
 
-  if (profile?.role === "admin") {
-    navigate("/admin");    // go to admin dashboard
-  } else {
-    navigate("/");         // normal users go to home
-  }
-}
+        if (profile?.role === "admin") {
+          navigate("/admin");    // go to admin dashboard
+        } else {
+          navigate("/");         // normal users go to home
+        }
+      }
 
     } catch (error: any) {
       toast.error('An unexpected error occurred');

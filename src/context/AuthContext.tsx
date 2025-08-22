@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '../utils/supabase';
+import { supabase, dbHelpers } from '../utils/supabase';
 import toast from 'react-hot-toast';
 
 interface UserProfile {
@@ -8,6 +8,7 @@ interface UserProfile {
   name: string;
   email: string;
   phoneNumber: string;
+  role?: string;
   address: {
     street: string;
     city: string;
@@ -41,6 +42,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   userProfile: UserProfile | null;
+  isAdmin: boolean;
   orders: Order[];
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
@@ -60,8 +62,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
 
+  // Check admin status when user changes
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (user) {
+        try {
+          const profile = await dbHelpers.getProfile(user.id);
+          setIsAdmin(profile?.role === 'admin');
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [user]);
   // Load profile and orders from localStorage
   useEffect(() => {
     const savedProfile = localStorage.getItem('userProfile');
@@ -75,6 +96,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         name: 'John Doe',
         email: 'john.doe@example.com',
         phoneNumber: '+1 234 567 8900',
+        role: 'user',
         address: {
           street: '123 Main Street',
           city: 'New York',
@@ -203,6 +225,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     session,
     loading,
     userProfile,
+    isAdmin,
     orders,
     signIn,
     signUp,
