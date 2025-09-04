@@ -1,13 +1,17 @@
+import { useLanguage } from '../context/LanguageContext';
+
 const About = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-gray-100 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">About PhotoPro</h1>
+          <h1 className="text-3xl font-bold mb-8">{t('about.title')}</h1>
           
           <div className="prose lg:prose-xl">
             <p className="text-lg mb-6">
-              Welcome to PhotoPixel, your premier destination for professional photography equipment. Since 2010, we've been serving photographers of all levels with the highest quality cameras, lenses, and accessories.
+              {t('about.intro')}
             </p>
             
             <div className="my-8">
@@ -18,23 +22,23 @@ const About = () => {
               />
             </div>
 
-            <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('about.mission.title')}</h2>
             <p className="mb-6">
-              We believe that every photographer deserves access to the best equipment to capture their vision. Our mission is to provide photographers with not just equipment, but the knowledge and support they need to create amazing images.
+              {t('about.mission.desc')}
             </p>
 
-            <h2 className="text-2xl font-bold mb-4">Why Choose Us?</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('about.why.title')}</h2>
             <ul className="list-disc pl-6 mb-6">
-              <li>Expert staff with years of photography experience</li>
-              <li>Carefully curated selection of premium equipment</li>
-              <li>Competitive prices and price match guarantee</li>
-              <li>Extended warranty options</li>
-              <li>Free shipping on orders over $100</li>
+              <li>{t('about.why.expert')}</li>
+              <li>{t('about.why.curated')}</li>
+              <li>{t('about.why.prices')}</li>
+              <li>{t('about.why.warranty')}</li>
+              <li>{t('about.why.shipping')}</li>
             </ul>
 
-            <h2 className="text-2xl font-bold mb-4">Our Guarantee</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('about.guarantee.title')}</h2>
             <p className="mb-6">
-              We stand behind every product we sell. If you're not completely satisfied with your purchase, we offer a 30-day return policy with no questions asked.
+              {t('about.guarantee.desc')}
             </p>
           </div>
         </div>
