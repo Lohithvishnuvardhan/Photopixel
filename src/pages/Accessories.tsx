@@ -6,6 +6,7 @@ import { useCartStore } from '../store/cart';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const staticAccessories = [
   {
@@ -108,6 +109,7 @@ const formatPrice = (price: number) => {
 
 const Accessories = () => {
   const { t } = useLanguage();
+  const { user, setPendingAction } = useAuth();
   const { addToCart } = useCart();
   const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const navigate = useNavigate();
@@ -118,11 +120,8 @@ const Accessories = () => {
     const fetchAdminAccessories = async () => {
       try {
         const response = await api.get('/products');
-        let products = response.data;
-        // Ensure products is an array before filtering
-        if (!Array.isArray(products)) {
-          products = [];
-        }
+        // Ensure response.data is an array before filtering
+        const products = Array.isArray(response.data) ? response.data : [];
         const adminAccessories = products.filter((product: any) => 
           product.category === 'Accessories' && 
           !staticAccessories.some(acc => acc.id === product._id)
@@ -162,6 +161,12 @@ const Accessories = () => {
   }, []);
 
   const handleAddToCart = (accessory: any) => {
+    if (!user) {
+      setPendingAction({ type: 'cart', product: accessory });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: accessory._id || accessory.id,
       name: accessory.name,
@@ -180,6 +185,12 @@ const Accessories = () => {
   };
 
   const handleBuyNow = (accessory: any) => {
+    if (!user) {
+      setPendingAction({ type: 'buyNow', product: accessory });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: accessory._id || accessory.id,
       name: accessory.name,

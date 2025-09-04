@@ -44,6 +44,8 @@ interface AuthContextType {
   userProfile: UserProfile | null;
   isAdmin: boolean;
   orders: Order[];
+  pendingAction: { type: 'cart' | 'buyNow'; product: any } | null;
+  setPendingAction: (action: { type: 'cart' | 'buyNow'; product: any } | null) => void;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -64,6 +66,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [pendingAction, setPendingAction] = useState<{ type: 'cart' | 'buyNow'; product: any } | null>(null);
 
   // Check admin status when user changes
   useEffect(() => {
@@ -227,6 +230,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     userProfile,
     isAdmin,
     orders,
+    pendingAction,
+    setPendingAction,
     signIn,
     signUp,
     signOut,

@@ -3,6 +3,7 @@ import { Minus, Plus, X, ShoppingBag, Package } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/Cartcontext';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const CartPage = () => {
   const { t } = useLanguage();

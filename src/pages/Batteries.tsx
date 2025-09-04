@@ -6,6 +6,7 @@ import { useCartStore } from '../store/cart';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const staticBatteries = [
   {
@@ -108,6 +109,7 @@ const formatPrice = (price: number) => {
 
 const Batteries = () => {
   const { t } = useLanguage();
+  const { user, setPendingAction } = useAuth();
   const { addToCart } = useCart();
   const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const navigate = useNavigate();
@@ -159,6 +161,12 @@ const Batteries = () => {
   }, []);
 
   const handleAddToCart = (battery: any) => {
+    if (!user) {
+      setPendingAction({ type: 'cart', product: battery });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: battery._id || battery.id,
       name: battery.name,
@@ -177,6 +185,12 @@ const Batteries = () => {
   };
 
   const handleBuyNow = (battery: any) => {
+    if (!user) {
+      setPendingAction({ type: 'buyNow', product: battery });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: battery._id || battery.id,
       name: battery.name,

@@ -3,9 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabase';
+import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/Cartcontext';
+import { useCartStore } from '../store/cart';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { pendingAction, setPendingAction } = useAuth();
+  const { addToCart } = useCart();
+  const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -46,6 +52,34 @@ export default function Login() {
 
         toast.success("Login successful!");
 
+        // Handle pending action after successful login
+        if (pendingAction) {
+          const { type, product } = pendingAction;
+          
+          if (type === 'cart') {
+            addToCart(product);
+            toast.success(`${product.name} added to cart!`);
+            setPendingAction(null);
+            navigate('/cart');
+          } else if (type === 'buyNow') {
+            addToBuyNow(product);
+            navigate('/payment', { 
+              state: { 
+                items: [...buyNowItems, {
+                  _id: product._id,
+                  name: product.name,
+                  price: product.price,
+                  quantity: 1,
+                  image: product.imageUrl
+                }],
+                totalAmount: buyNowTotal + product.price,
+                isBuyNow: true
+              } 
+            });
+            setPendingAction(null);
+          }
+          return;
+        }
         if (profile?.role === "admin") {
           navigate("/admin");    // go to admin dashboard
         } else {

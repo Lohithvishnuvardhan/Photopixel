@@ -3,9 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase } from '../utils/supabase';
+import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/Cartcontext';
+import { useCartStore } from '../store/cart';
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { pendingAction, setPendingAction } = useAuth();
+  const { addToCart } = useCart();
+  const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -60,6 +66,35 @@ export default function Signup() {
       }
 
       if (data.user) {
+        // Handle pending action after successful signup
+        if (pendingAction) {
+          const { type, product } = pendingAction;
+          
+          if (type === 'cart') {
+            addToCart(product);
+            toast.success(`${product.name} added to cart!`);
+            setPendingAction(null);
+            navigate('/cart');
+          } else if (type === 'buyNow') {
+            addToBuyNow(product);
+            navigate('/payment', { 
+              state: { 
+                items: [...buyNowItems, {
+                  _id: product._id,
+                  name: product.name,
+                  price: product.price,
+                  quantity: 1,
+                  image: product.imageUrl
+                }],
+                totalAmount: buyNowTotal + product.price,
+                isBuyNow: true
+              } 
+            });
+            setPendingAction(null);
+          }
+          return;
+        }
+        
         toast.success('Account created successfully! Please check your email to verify your account.');
         navigate('/login');
       }

@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useCartStore } from '../store/cart';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 const defaultCameras = [
   {
@@ -98,6 +99,7 @@ interface Camera {
 
 const Cameras = () => {
   const { t } = useLanguage();
+  const { user, setPendingAction } = useAuth();
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { addToCart } = useCart();
@@ -111,10 +113,22 @@ const Cameras = () => {
   const fetchCameras = async () => {
     try {
       const response = await api.get('/products');
-      const cameraProducts = response.data.filter((product: Camera) => 
-        product.category.toLowerCase() === 'cameras'
+      // Ensure response.data is an array before filtering
+      const products = Array.isArray(response.data) ? response.data : [];
+      // Filter for products that are in the 'Cameras' category and have required Camera fields
+      const cameraProducts = products.filter(
+        (product: any): product is Camera =>
+          product &&
+          typeof product.category === 'string' &&
+          product.category.toLowerCase() === 'cameras' &&
+          typeof product._id === 'string' &&
+          typeof product.name === 'string' &&
+          typeof product.price === 'number' &&
+          typeof product.imageUrl === 'string' &&
+          typeof product.description === 'string' &&
+          typeof product.stock === 'number'
       );
-      
+
       const processedCameras = cameraProducts.map((camera: Camera) => ({
         ...camera,
         specs: camera.specs || [
@@ -151,6 +165,12 @@ const Cameras = () => {
   };
 
   const handleAddToCart = (camera: Camera) => {
+    if (!user) {
+      setPendingAction({ type: 'cart', product: camera });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: camera._id,
       name: camera.name,
@@ -169,6 +189,12 @@ const Cameras = () => {
   };
 
   const handleBuyNow = (camera: Camera) => {
+    if (!user) {
+      setPendingAction({ type: 'buyNow', product: camera });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: camera._id,
       name: camera.name,

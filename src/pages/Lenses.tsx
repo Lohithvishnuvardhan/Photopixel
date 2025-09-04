@@ -6,6 +6,7 @@ import { useCartStore } from '../store/cart';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 // Static lenses data
 const staticLenses = [
@@ -113,6 +114,7 @@ const formatPrice = (price: number) => {
 
 const Lenses = () => {
   const { t } = useLanguage();
+  const { user, setPendingAction } = useAuth();
   const { addToCart } = useCart();
   const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const navigate = useNavigate();
@@ -163,6 +165,12 @@ const Lenses = () => {
   }, []);
 
   const handleAddToCart = (lens: any) => {
+    if (!user) {
+      setPendingAction({ type: 'cart', product: lens });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: lens._id,
       name: lens.name,
@@ -181,6 +189,12 @@ const Lenses = () => {
   };
 
   const handleBuyNow = (lens: any) => {
+    if (!user) {
+      setPendingAction({ type: 'buyNow', product: lens });
+      navigate('/login');
+      return;
+    }
+
     const product = {
       _id: lens._id,
       name: lens.name,

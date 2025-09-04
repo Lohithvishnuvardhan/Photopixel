@@ -177,7 +177,7 @@ const Layout = () => {
                   <div className="relative group">
                     <button className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors">
                       <User className="h-6 w-6 md:h-8 md:w-8" />
-                      <span className="hidden md:block text-sm">{user.user_metadata?.name || user.email}</span>
+                      <span className="hidden md:block text-sm">{user.user_metadata?.name || user.email?.split('@')[0]}</span>
                     </button>
                     
                     <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
