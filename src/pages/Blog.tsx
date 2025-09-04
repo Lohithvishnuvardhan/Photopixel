@@ -24,7 +24,7 @@ const blogPosts: BlogPost[] = [
     author: 'Sarah Johnson',
     date: '2024-01-15',
     category: 'Photography Tips',
-    image: 'https://images.unsplash.com/photo-1554048612-b6a482b224b8?auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1581591524425-c7e0978865fc?auto=format&fit=crop&q=80',
     readTime: '5 min read'
   },
   {
@@ -46,7 +46,7 @@ const blogPosts: BlogPost[] = [
     author: 'Emily Rodriguez',
     date: '2024-01-10',
     category: 'Gear Guide',
-    image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?auto=format&fit=crop&q=80',
+    image: "https://i.postimg.cc/qvDwt1Y7/Access1.avif",
     readTime: '6 min read'
   },
   {
@@ -68,7 +68,7 @@ const blogPosts: BlogPost[] = [
     author: 'Lisa Wang',
     date: '2024-01-05',
     category: 'Photography Tips',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&q=80',
+    image: "https://i.postimg.cc/gcLCGZxR/battery2.avif",
     readTime: '9 min read'
   },
   {
