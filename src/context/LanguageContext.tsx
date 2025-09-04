@@ -68,6 +68,20 @@ const translations = {
     'products.specifications': 'Specifications',
     'products.ships': 'Ships in 24 hours',
     
+    // About page
+    'about.title': 'About PhotoPro',
+    'about.mission.title': 'Our Mission',
+    'about.mission.desc': 'We believe that every photographer deserves access to the best equipment to capture their vision. Our mission is to provide photographers with not just equipment, but the knowledge and support they need to create amazing images.',
+    'about.why.title': 'Why Choose Us?',
+    'about.why.expert': 'Expert staff with years of photography experience',
+    'about.why.curated': 'Carefully curated selection of premium equipment',
+    'about.why.prices': 'Competitive prices and price match guarantee',
+    'about.why.warranty': 'Extended warranty options',
+    'about.why.shipping': 'Free shipping on orders over $100',
+    'about.guarantee.title': 'Our Guarantee',
+    'about.guarantee.desc': 'We stand behind every product we sell. If you\'re not completely satisfied with your purchase, we offer a 30-day return policy with no questions asked.',
+    'about.intro': 'Welcome to PhotoPixel, your premier destination for professional photography equipment. Since 2010, we\'ve been serving photographers of all levels with the highest quality cameras, lenses, and accessories.',
+    
     // Cart
     'cart.title': 'Shopping Cart',
     'cart.empty': 'Your cart is empty',
@@ -166,6 +180,20 @@ const translations = {
     'products.keyFeatures': 'मुख्य विशेषताएं',
     'products.specifications': 'विशिष्टताएं',
     'products.ships': '24 घंटे में शिप',
+    
+    // About page
+    'about.title': 'फोटोप्रो के बारे में',
+    'about.mission.title': 'हमारा मिशन',
+    'about.mission.desc': 'हम मानते हैं कि हर फोटोग्राफर को अपनी दृष्टि को कैप्चर करने के लिए सर्वोत्तम उपकरण तक पहुंच का हक है। हमारा मिशन फोटोग्राफरों को न केवल उपकरण प्रदान करना है, बल्कि उन्हें अद्भुत छवियां बनाने के लिए आवश्यक ज्ञान और सहायता भी प्रदान करना है।',
+    'about.why.title': 'हमें क्यों चुनें?',
+    'about.why.expert': 'वर्षों के फोटोग्राफी अनुभव वाले विशेषज्ञ कर्मचारी',
+    'about.why.curated': 'प्रीमियम उपकरण का सावधानीपूर्वक चयनित संग्रह',
+    'about.why.prices': 'प्रतिस्पर्धी कीमतें और मूल्य मैच गारंटी',
+    'about.why.warranty': 'विस्तारित वारंटी विकल्प',
+    'about.why.shipping': '$100 से अधिक के ऑर्डर पर मुफ्त शिपिंग',
+    'about.guarantee.title': 'हमारी गारंटी',
+    'about.guarantee.desc': 'हम अपने द्वारा बेचे जाने वाले हर उत्पाद के पीछे खड़े हैं। यदि आप अपनी खरीदारी से पूरी तरह संतुष्ट नहीं हैं, तो हम बिना किसी सवाल के 30-दिन की वापसी नीति प्रदान करते हैं।',
+    'about.intro': 'फोटोपिक्सेल में आपका स्वागत है, पेशेवर फोटोग्राफी उपकरण के लिए आपका प्रमुख गंतव्य। 2010 से, हम सभी स्तरों के फोटोग्राफरों को उच्चतम गुणवत्ता वाले कैमरा, लेंस और एक्सेसरीज के साथ सेवा प्रदान कर रहे हैं।',
     
     // Cart
     'cart.title': 'शॉपिंग कार्ट',
@@ -266,6 +294,20 @@ const translations = {
     'products.specifications': 'వివరణలు',
     'products.ships': '24 గంటల్లో షిప్',
     
+    // About page
+    'about.title': 'ఫోటోప్రో గురించి',
+    'about.mission.title': 'మా లక్ష్యం',
+    'about.mission.desc': 'ప్రతి ఫోటోగ్రాఫర్ వారి దృష్టిని క్యాప్చర్ చేయడానికి ఉత్తమ పరికరాలకు యాక్సెస్ అర్హులని మేము నమ్ముతున్నాము. మా లక్ష్యం ఫోటోగ్రాఫర్లకు కేవలం పరికరాలను మాత్రమే కాకుండా, అద్భుతమైన చిత్రాలను సృష్టించడానికి అవసరమైన జ్ఞానం మరియు మద్దతును అందించడం.',
+    'about.why.title': 'మమ్మల్ని ఎందుకు ఎంచుకోవాలి?',
+    'about.why.expert': 'సంవత్సరాల ఫోటోగ్రఫీ అనుభవం ఉన్న నిపుణుల సిబ్బంది',
+    'about.why.curated': 'ప్రీమియం పరికరాల జాగ్రత్తగా ఎంపిక చేసిన ఎంపిక',
+    'about.why.prices': 'పోటీ ధరలు మరియు ధర మ్యాచ్ హామీ',
+    'about.why.warranty': 'పొడిగించిన వారంటీ ఎంపికలు',
+    'about.why.shipping': '$100 కంటే ఎక్కువ ఆర్డర్లపై ఉచిత షిప్పింగ్',
+    'about.guarantee.title': 'మా హామీ',
+    'about.guarantee.desc': 'మేము విక్రయించే ప్రతి ఉత్పత్తి వెనుక మేము నిలబడతాము. మీరు మీ కొనుగోలుతో పూర్తిగా సంతృప్తి చెందకపోతే, మేము ఎటువంటి ప్రశ్నలు లేకుండా 30-రోజుల రిటర్న్ పాలసీని అందిస్తాము।',
+    'about.intro': 'ఫోటోపిక్సెల్‌కు స్వాగతం, వృత్తిపరమైన ఫోటోగ్రఫీ పరికరాలకు మీ ప్రధాన గమ్యస్థానం. 2010 నుండి, మేము అన్ని స్థాయిల ఫోటోగ్రాఫర్లకు అత్యధిక నాణ్యత కెమెరాలు, లెన్స్‌లు మరియు యాక్సెసరీలతో సేవలు అందిస్తున్నాము।',
+    
     // Cart
     'cart.title': 'షాపింగ్ కార్ట్',
     'cart.empty': 'మీ కార్ట్ ఖాళీగా ఉంది',
@@ -315,7 +357,11 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    // Fallback to 'en' if translation for current language is missing
+    // Fix type error by asserting key as keyof typeof translations[language]
+    const langTranslations = translations[language] as Record<string, string>;
+    const enTranslations = translations['en'] as Record<string, string>;
+    return langTranslations[key] ?? enTranslations[key] ?? key;
   };
 
   return (

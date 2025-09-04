@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useCartStore } from '../store/cart';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
+import { useLanguage } from '../context/LanguageContext';
 
 const staticAccessories = [
   {
@@ -106,6 +107,7 @@ const formatPrice = (price: number) => {
 };
 
 const Accessories = () => {
+  const { t } = useLanguage();
   const { addToCart } = useCart();
   const { addToBuyNow, buyNowItems, buyNowTotal } = useCartStore();
   const navigate = useNavigate();
@@ -116,7 +118,12 @@ const Accessories = () => {
     const fetchAdminAccessories = async () => {
       try {
         const response = await api.get('/products');
-        const adminAccessories = response.data.filter((product: any) => 
+        let products = response.data;
+        // Ensure products is an array before filtering
+        if (!Array.isArray(products)) {
+          products = [];
+        }
+        const adminAccessories = products.filter((product: any) => 
           product.category === 'Accessories' && 
           !staticAccessories.some(acc => acc.id === product._id)
         );
@@ -213,17 +220,17 @@ const Accessories = () => {
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">Professional Accessories</h1>
-            <p className="mt-2 text-gray-600">Essential gear for your photography needs</p>
+            <h1 className="text-4xl font-bold text-gray-900">{t('products.accessories.title')}</h1>
+            <p className="mt-2 text-gray-600">{t('products.accessories.subtitle')}</p>
           </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center text-green-600">
               <Truck className="h-5 w-5 mr-2" />
-              <span>Free Shipping</span>
+              <span>{t('products.freeShipping')}</span>
             </div>
             <div className="flex items-center text-purple-600">
               <Shield className="h-5 w-5 mr-2" />
-              <span>Warranty Included</span>
+              <span>{t('products.warranty')}</span>
             </div>
           </div>
         </div>
@@ -238,10 +245,10 @@ const Accessories = () => {
                   className="w-full h-[400px] object-cover"
                 />
                 <div className="absolute top-4 right-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  Professional Grade
+                  {t('products.inStock')}
                 </div>
                 <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  {accessory.inStock ? 'In Stock' : 'Out of Stock'}
+                  {accessory.inStock ? t('products.inStock') : t('products.outOfStock')}
                 </div>
               </div>
               <div className="p-6">
@@ -253,7 +260,7 @@ const Accessories = () => {
                 </div>
 
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold mb-2">Key Features</h4>
+                  <h4 className="text-lg font-semibold mb-2">{t('products.keyFeatures')}</h4>
                   <ul className="grid grid-cols-2 gap-2">
                     {accessory.features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-center text-gray-600">
@@ -265,7 +272,7 @@ const Accessories = () => {
                 </div>
 
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold mb-2">Specifications</h4>
+                  <h4 className="text-lg font-semibold mb-2">{t('products.specifications')}</h4>
                   <ul className="grid grid-cols-2 gap-2">
                     {accessory.specs.map((spec: string, index: number) => (
                       <li key={index} className="flex items-center text-gray-600">
@@ -281,7 +288,7 @@ const Accessories = () => {
                     <span className="text-3xl font-bold text-gray-900">{formatPrice(accessory.price)}</span>
                     <div className="flex items-center mt-2 text-sm text-gray-600">
                       <Clock className="h-4 w-4 mr-1" />
-                      <span>Ships in 24 hours</span>
+                      <span>{t('products.ships')}</span>
                     </div>
                   </div>
                   <div className="space-x-4">
@@ -290,14 +297,14 @@ const Accessories = () => {
                       className="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                       disabled={!accessory.inStock}
                     >
-                      Add to Cart
+                      {t('products.addToCart')}
                     </button>
                     <button 
                       onClick={() => handleBuyNow(accessory)}
                       className="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                       disabled={!accessory.inStock}
                     >
-                      Buy Now
+                      {t('products.buyNow')}
                     </button>
                   </div>
                 </div>
