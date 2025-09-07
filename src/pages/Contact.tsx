@@ -61,9 +61,9 @@ const Contact = () => {
                   <div>
                     <h3 className="font-medium">Address</h3>
                     <p className="text-gray-600">
-                      123 Camera Street<br />
-                      Photography District<br />
-                      New York, NY 10001
+                      Ramalayam Street<br />
+                      Vijayawada<br />
+                      India , 123456
                     </p>
                   </div>
                 </div>
@@ -72,7 +72,7 @@ const Contact = () => {
                   <Phone className="w-6 h-6 text-purple-600 mr-3" />
                   <div>
                     <h3 className="font-medium">Phone</h3>
-                    <p className="text-gray-600">(555) 123-4567</p>
+                    <p className="text-gray-600">(+91) 7702456375</p>
                   </div>
                 </div>
                 
@@ -80,7 +80,7 @@ const Contact = () => {
                   <Mail className="w-6 h-6 text-purple-600 mr-3" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-gray-600">info@photopro.com</p>
+                    <p className="text-gray-600">lohithvishnu@gmail.com</p>
                   </div>
                 </div>
               </div>
