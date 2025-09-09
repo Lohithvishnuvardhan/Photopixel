@@ -21,12 +21,18 @@ export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ childr
       }
 
       try {
-        const profile = await dbHelpers.getProfile(user.id);
-        if (profile?.role === 'admin') {
+        const isAdminUser = await dbHelpers.isAdmin(user.id);
+        if (isAdminUser) {
           setIsAdmin(true);
         } else {
-          setIsAdmin(false);
-          toast.error('Access denied. Admin privileges required.');
+          // Also check profile role as fallback
+          const profile = await dbHelpers.getProfile(user.id);
+          if (profile?.role === 'admin') {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+            toast.error('Access denied. Admin privileges required.');
+          }
         }
       } catch (error) {
         console.error('Error checking admin status:', error);

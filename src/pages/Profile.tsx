@@ -49,30 +49,26 @@ export default function Profile() {
     try {
       if (!user) return;
       
+      // Always try to get profile, dbHelpers.getProfile will create one if it doesn't exist
       const profile = await dbHelpers.getProfile(user.id);
-      
-      if (profile) {
-        setProfileData(profile);
-      } else {
-        // Create initial profile if it doesn't exist
-        const newProfile = {
-          id: user.id,
-          name: user.user_metadata?.name || user.email?.split('@')[0] || '',
-          email: user.email || '',
-          phone_number: '',
-          address: '',
-          city: '',
-          state: '',
-          postal_code: '',
-          country: ''
-        };
-        
-        const createdProfile = await dbHelpers.updateProfile(user.id, newProfile);
-        setProfileData(createdProfile);
-      }
+      setProfileData(profile);
     } catch (error: any) {
       console.error('Error loading profile:', error);
-      toast.error('Failed to load profile data');
+      toast.error('Failed to load profile data: ' + error.message);
+      
+      // Fallback: create a basic profile from user data
+      const fallbackProfile = {
+        id: user.id,
+        name: user.user_metadata?.name || user.email?.split('@')[0] || '',
+        email: user.email || '',
+        phone_number: '',
+        address: '',
+        city: '',
+        state: '',
+        postal_code: '',
+        country: ''
+      };
+      setProfileData(fallbackProfile);
     } finally {
       setIsLoading(false);
     }

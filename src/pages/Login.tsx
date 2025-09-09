@@ -43,12 +43,8 @@ export default function Login() {
       }
 
       if (data.user) {
-        // Fetch profile role
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", data.user.id)
-          .single();
+        // Check if user is admin
+        const isAdminUser = await dbHelpers.isAdmin(data.user.id);
 
         toast.success("Login successful!");
 
@@ -80,7 +76,8 @@ export default function Login() {
           }
           return;
         }
-        if (profile?.role === "admin") {
+        
+        if (isAdminUser) {
           navigate("/admin");    // go to admin dashboard
         } else {
           navigate("/");         // normal users go to home

@@ -44,33 +44,37 @@ export default function EditProfile() {
     try {
       if (!user) return;
       
+      // Get profile (will create one if it doesn't exist)
       const profile = await dbHelpers.getProfile(user.id);
       
-      if (profile) {
-        setProfileData({
-          id: profile.id,
-          name: profile.name || '',
-          email: profile.email || user.email || '',
-          phone_number: profile.phone_number || '',
-          address: profile.address || '',
-          city: profile.city || '',
-          state: profile.state || '',
-          postal_code: profile.postal_code || '',
-          country: profile.country || '',
-          profile_image: profile.profile_image
-        });
-      } else {
-        // Set default values from user data
-        setProfileData(prev => ({
-          ...prev,
-          id: user.id,
-          name: user.user_metadata?.name || user.email?.split('@')[0] || '',
-          email: user.email || ''
-        }));
-      }
+      setProfileData({
+        id: profile.id,
+        name: profile.name || '',
+        email: profile.email || user.email || '',
+        phone_number: profile.phone_number || '',
+        address: profile.address || '',
+        city: profile.city || '',
+        state: profile.state || '',
+        postal_code: profile.postal_code || '',
+        country: profile.country || '',
+        profile_image: profile.profile_image
+      });
     } catch (error) {
       console.error('Error loading profile:', error);
-      toast.error('Failed to load profile data');
+      toast.error('Failed to load profile data: ' + error.message);
+      
+      // Set fallback data
+      setProfileData({
+        id: user.id,
+        name: user.user_metadata?.name || user.email?.split('@')[0] || '',
+        email: user.email || '',
+        phone_number: '',
+        address: '',
+        city: '',
+        state: '',
+        postal_code: '',
+        country: ''
+      });
     }
   };
 

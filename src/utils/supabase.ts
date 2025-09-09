@@ -48,26 +48,97 @@ export const authHelpers = {
 export const dbHelpers = {
   // Get user profile
   getProfile: async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    
-    if (error && error.code !== 'PGRST116') throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // Profile doesn't exist, create it
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const newProfile = {
+              id: userId,
+              name: user.user_metadata?.name || user.email?.split('@')[0] || '',
+              email: user.email || '',
+              role: 'user',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            };
+            
+            const { data: createdProfile, error: createError } = await supabase
+              .from('profiles')
+              .insert(newProfile)
+              .select()
+              .single();
+            
+            if (createError) throw createError;
+            return createdProfile;
+          }
+        }
+        throw error;
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('Error in getProfile:', error);
+      throw error;
+    }
   },
 
   // Update user profile
   updateProfile: async (userId: string, updates: any) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .upsert({ id: userId, ...updates })
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert({ 
+          id: userId, 
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error in updateProfile:', error);
+      throw error;
+    }
+  },
+
+  // Check if user is admin
+  isAdmin: async (userId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('is_admin');
+      if (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+      }
+      return data || false;
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+  },
+
+  // Make user admin (for testing purposes)
+  makeUserAdmin: async (userEmail: string) => {
+    try {
+      const { error } = await supabase.rpc('make_user_admin', {
+        user_email: userEmail
+      });
+      
+      if (error) throw error;
+      return { success: true };
+    } catch (error) {
+      console.error('Error making user admin:', error);
+      throw error;
+    }
+  },
   },
 
   // Get user orders
