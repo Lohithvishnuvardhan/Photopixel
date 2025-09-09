@@ -10,6 +10,8 @@ import {
   BarChart3
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { createAdminUser, makeExistingUserAdmin } from '../../utils/createAdminUser';
+import toast from 'react-hot-toast';
 
 interface DashboardStats {
   totalUsers: number;
@@ -115,6 +117,36 @@ const AdminDashboard = () => {
     }
   };
 
+  // Development helper function to create admin user
+  const handleCreateAdminUser = async () => {
+    const email = prompt('Enter email for admin user:');
+    const password = prompt('Enter password for admin user:');
+    const name = prompt('Enter name for admin user:');
+    
+    if (email && password && name) {
+      const result = await createAdminUser(email, password, name);
+      if (result.success) {
+        toast.success('Admin user created successfully!');
+      } else {
+        toast.error('Failed to create admin user: ' + result.error);
+      }
+    }
+  };
+
+  // Development helper function to make existing user admin
+  const handleMakeUserAdmin = async () => {
+    const email = prompt('Enter email of user to make admin:');
+    
+    if (email) {
+      const result = await makeExistingUserAdmin(email);
+      if (result.success) {
+        toast.success('User made admin successfully!');
+      } else {
+        toast.error('Failed to make user admin: ' + result.error);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -122,6 +154,25 @@ const AdminDashboard = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-gray-600 mt-2">Welcome back! Here's what's happening with your store.</p>
+          
+          {/* Development Admin Tools */}
+          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <h3 className="text-sm font-medium text-yellow-800 mb-2">Development Tools</h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={handleCreateAdminUser}
+                className="text-xs bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700"
+              >
+                Create Admin User
+              </button>
+              <button
+                onClick={handleMakeUserAdmin}
+                className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+              >
+                Make User Admin
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Stats Grid */}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '../utils/supabase';
+import { dbHelpers, supabase } from '../utils/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/Cartcontext';
 import { useCartStore } from '../store/cart';
@@ -43,12 +43,8 @@ export default function Login() {
       }
 
       if (data.user) {
-        // Fetch profile role
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", data.user.id)
-          .single();
+        // Check if user is admin
+        const isAdminUser = await dbHelpers.getProfile(data.user.id)?.then(profile => profile?.isAdmin);
 
         toast.success("Login successful!");
 
@@ -80,7 +76,8 @@ export default function Login() {
           }
           return;
         }
-        if (profile?.role === "admin") {
+        
+        if (isAdminUser) {
           navigate("/admin");    // go to admin dashboard
         } else {
           navigate("/");         // normal users go to home
