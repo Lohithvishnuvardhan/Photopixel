@@ -61,24 +61,7 @@ export default function EditProfile() {
       });
     } catch (error) {
       console.error('Error loading profile:', error);
-      let errorMessage = 'Failed to load profile data';
-      if (error instanceof Error) {
-        errorMessage += ': ' + error.message;
-      }
-      toast.error(errorMessage);
-
-      // Set fallback data
-      setProfileData({
-        id: user?.id || '',
-        name: user?.user_metadata?.name || user?.email?.split('@')[0] || '',
-        email: user?.email || '',
-        phone_number: '',
-        address: '',
-        city: '',
-        state: '',
-        postal_code: '',
-        country: ''
-      });
+      toast.error('Failed to load profile data');
     }
   };
 

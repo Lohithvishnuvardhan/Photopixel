@@ -45,6 +45,7 @@ export const createAdminUser = async (email: string, password: string, name: str
 // Helper function to make existing user admin
 export const makeExistingUserAdmin = async (userEmail: string) => {
   try {
+<<<<<<< HEAD
     // Find the user by email using getProfile (since getUserByEmail does not exist)
     // Assume userEmail is unique and stored as 'email' in the profile
     const { data: users, error } = await supabase
@@ -67,6 +68,9 @@ export const makeExistingUserAdmin = async (userEmail: string) => {
 
     // Update the user's profile to set role as admin
     await dbHelpers.updateProfile(user.id, { role: 'admin' });
+=======
+    await dbHelpers.makeUserAdmin(userEmail);
+>>>>>>> 8afbf9079688dfd1a8e44b5c18b2488c734fd37a
     console.log('User made admin successfully:', userEmail);
     return { success: true };
   } catch (error: any) {

@@ -43,8 +43,12 @@ export default function Login() {
       }
 
       if (data.user) {
-        // Check if user is admin
-        const isAdminUser = await dbHelpers.getProfile(data.user.id)?.then(profile => profile?.isAdmin);
+        // Fetch profile role
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .single();
 
         toast.success("Login successful!");
 

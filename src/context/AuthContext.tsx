@@ -74,7 +74,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (user) {
         try {
           const profile = await dbHelpers.getProfile(user.id);
-          setIsAdmin(profile?.role === 'admin');
+          const adminStatus = await dbHelpers.isAdmin(user.id);
+          setIsAdmin(adminStatus || profile?.role === 'admin');
         } catch (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);
